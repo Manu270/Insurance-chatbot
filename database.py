@@ -1,6 +1,5 @@
 import os
-from langchain.vectorstores import FAISS
-from langchain_community.vectorstores import FAISS as FaissComm
+from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
 def get_embedding_model():
@@ -25,12 +24,8 @@ def get_vectorstore(documents):
     """
     embeddings = get_embedding_model()
     
-    # Try using langchain.vectorstores.FAISS, but fall back to langchain_community if it fails
-    try:
-        vectorstore = FAISS.from_documents(documents, embeddings)
-    except (ImportError, AttributeError):
-        vectorstore = FaissComm.from_documents(documents, embeddings)
-        
+    # Create vectorstore with embedded documents
+    vectorstore = FAISS.from_documents(documents, embeddings)
     return vectorstore
 
 def get_relevant_documents(vectorstore, query, k=4):

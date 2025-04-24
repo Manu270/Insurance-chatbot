@@ -1,24 +1,25 @@
 import os
 import io
-from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.docstore.document import Document
+from langchain.schema import Document
 
 def load_pdf(file_path):
     """
-    Load a PDF file and extract its text content.
+    Load a text file (stored with .pdf extension) and extract its content.
     
     Args:
-        file_path (str): Path to the PDF file.
+        file_path (str): Path to the file.
     
     Returns:
-        str: Extracted text from the PDF.
+        str: Extracted text from the file.
     """
-    pdf_reader = PdfReader(file_path)
-    text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
-    return text
+    try:
+        with open(file_path, 'r') as file:
+            text = file.read()
+        return text
+    except Exception as e:
+        print(f"Error reading file {file_path}: {e}")
+        return ""
 
 def split_text(text, chunk_size=1000, chunk_overlap=200):
     """
